@@ -17,7 +17,7 @@ char pass[] = SECRET_PASS;
 int status = WL_IDLE_STATUS;
 
 
-char serverAddress[] = "10.0.0.100";
+char serverAddress[] = "192.168.4.8";
 char serverPath[] = "/sensor";
 int port = 31310;
 

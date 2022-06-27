@@ -1,0 +1,70 @@
+<h1 id="DATA"></h1>
+
+<button onclick="startEx()">START</button>
+<button onclick="stopEx()">STOP</button>
+
+<div id="CONNECTION_STATUS"></div>
+
+<script>
+    let socket = new WebSocket("ws://192.168.4.8:31310/web");
+    let messageCount = 10;
+    let noConnectionStyle = "height: 50px; width: 50px; background-color:red";
+    let hasConnectionStyle = "height: 50px; width: 50px; background-color:green";
+    let lastConnectionStatusResponse = Date.now();
+
+    document.getElementById("CONNECTION_STATUS").style = noConnectionStyle;
+
+    setInterval(
+        ()=>{ 
+            sendStatus();
+            if(lastConnectionStatusResponse < Date.now() - 5000){
+                document.getElementById("CONNECTION_STATUS").style = noConnectionStyle;
+            }
+        },
+        5000
+    )
+
+    function startEx(){
+        socket.send("START{\"command\":\"StartExperiment\",\"arguments\":[]\"}END");
+    }
+    function stopEx(){
+        socket.send("START{\"command\":\"StopExperiment\",\"arguments\":[]\"}END");
+    }
+    function sendStatus(){
+        socket.send("START{\"command\":\"STATUS\",\"arguments\":[]\"}END");
+    }
+
+    socket.onopen = function(e) {
+        // alert("[open] Connection established");
+        // alert("Sending to server");
+        // socket.send("My name is John");
+    };
+
+
+    function processDataFromSensor(data){
+        console.log("DATA")
+        if(data["data"] == "STATUS") document.getElementById("CONNECTION_STATUS").style = hasConnectionStyle;
+        else document.getElementById("DATA").innerText = event.data
+    }
+
+    socket.onmessage = function(event) {
+        const response = JSON.parse(event.data);
+        if("data" in response) processDataFromSensor(response);
+        lastConnectionStatusResponse = Date.now();
+    };
+
+    socket.onclose = function(event) {
+    if (event.wasClean) {
+        // alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+        socket = new WebSocket("ws://192.168.4.8:31310/web");
+        // e.g. server process killed or network down
+        // event.code is usually 1006 in this case
+        // alert('[close] Connection died');
+    }
+    };
+
+    socket.onerror = function(error) {
+        // alert(`[error] ${error.message}`);
+    };
+</script>
