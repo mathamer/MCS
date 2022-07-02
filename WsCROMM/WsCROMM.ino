@@ -11,6 +11,12 @@
 #define RGB_LED_RED 26
 #define RGB_LED_BLUE 27
 
+int sonda1 = 0;
+int sonda2 = 0;
+int sonda3 = 0;
+int sonda4 = 0;
+int sonda5 = 0;
+int sonda6 = 0;
 
 char ssid[] = SECRET_SSID;          
 char pass[] = SECRET_PASS;
@@ -86,12 +92,25 @@ void setup() {
 
 
 String GenerateSensorData(bool status = false){
-  String message = String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20));
+  String message = String(sonda1) + "," + String(sonda2) + "," + String(sonda3) + "," + String(sonda4) + "," + String(sonda5) + "," + String(sonda6);
   if(status) message = COMMAND_STATUS;
   return ParseSensorMessage(message, getTime());
 }
 
+// String GenerateSensorData(bool status = false){
+//   String message = String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20));
+//   if(status) message = COMMAND_STATUS;
+//   return ParseSensorMessage(message, getTime());
+// }
+
 void loop() {
+  sonda1 = analogRead(0);
+  sonda2 = analogRead(1);
+  sonda3 = analogRead(2);
+  sonda4 = analogRead(3);
+  sonda5 = analogRead(4);
+  sonda6 = analogRead(5);
+  
   if(client.connected()){
     SetLED(0, 255, 0);
     unsigned long currentMillis = millis();

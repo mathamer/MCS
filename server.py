@@ -1,6 +1,7 @@
-from json import loads
-from quart import Quart, send_from_directory, websocket
+from json import loads, dumps
+from quart import Quart, send_from_directory, websocket, Response
 import asyncio
+import os
 
 
 global MessageCounter
@@ -10,14 +11,24 @@ global ServerOutputMessageQueue
 ServerInputMessageQueue     = asyncio.Queue()   #  arduino -> web
 ServerOutputMessageQueue    = asyncio.Queue()   #  web -> arduino
 TIMEOUT = 0.1
+FILEPATH = "data/"
+FILENAME = "data.csv"
+FILES = next(os.walk(FILEPATH), (None, None, []))[2]  # [] if no file
+# FILES = [ FILENAME ]
 
-
-app = Quart(__name__)
+app = Quart(__name__, static_folder="public")
 
 def saveData(stringData):
-    with open("data.csv", "a") as file:
+    global FILENAME
+    global FILEPATH
+    with open(FILEPATH + FILENAME, "a") as file:
         file.write(stringData)
 
+def init_file():
+    global FILENAME
+    global FILEPATH
+    with open(FILEPATH + FILENAME, "a") as file:
+        file.write("s1,s2,s3,s4,s5,s6,timestamp\n")
 
 async def sensorReceive():
     while True:
@@ -60,6 +71,58 @@ async def webSend():
 @app.route("/")
 async def hello():
     return await send_from_directory("public","index.html")
+
+@app.route('/<path:filename>')
+async def send_file(filename):  
+    return await send_from_directory("public", filename)
+
+@app.route("/api")
+async def json():
+    return {"hello": "world"}
+
+@app.route("/api/files/start/<filename>")
+async def change_filename(filename):
+    global FILENAME
+    global FILEPATH
+    global FILES
+    FILENAME = f'data.{filename}.csv'
+    FILES.append(FILENAME)
+    init_file()
+    return Response("ok",status=200)
+
+@app.route("/api/files/<filename>/remove")
+async def remove_filename(filename):
+    global FILENAME
+    global FILEPATH
+    global FILES
+    # tmpFilename = f'data.{filename}.csv'
+    FILES.remove(filename) 
+    os.remove(FILEPATH + filename)
+    return Response("ok",status=200)
+
+
+@app.route("/api/files/list")
+async def files_list():
+    global FILES
+    FILES = next(os.walk(FILEPATH), (None, None, []))[2]  # [] if no file
+    return Response(dumps(FILES),  mimetype='application/json')
+
+@app.route("/api/files/<filename>")
+async def files_get(filename):
+    global FILENAME
+    global FILEPATH
+    return await send_from_directory(FILEPATH, FILENAME)
+
+
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
+
 
 @app.websocket("/sensor")
 async def ws_sensor():
@@ -117,19 +180,6 @@ if __name__ == "__main__":
 # from flask import Flask, send_from_directory
 # import websockets
 
-
-# loop = asyncio.get_event_loop()
-# app = Flask(__name__, static_folder="./www")
-
-# @app.route('/')
-# def hello_world():
-#     return send_from_directory('www', 'index.html')
-
-
-
-
-
-
 # async def echo(websocket):
 #     global MessageCounter
 #     async for message in websocket:
@@ -142,10 +192,10 @@ if __name__ == "__main__":
 
 
 # async def main():
-#     async with websockets.serve(echo, "0.0.0.0", 31310):
+#     async with websockets.serve(echo, "192.168.4.8", 31310):
 #         await asyncio.Future()  # run forever
 
 
 
 # if __name__ == '__main__':
-#     app.run(debug=False,host="0.0.0.0", port=5000, use_reloader=False)
+#     app.run(debug=False,host="192.168.4.8", port=5000, use_reloader=False)
