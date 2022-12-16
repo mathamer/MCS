@@ -1,2 +1,2 @@
-#define SECRET_SSID "ISKONOVAC-83BAC8"
-#define SECRET_PASS "5947A8BBB6BD"
+#define SECRET_SSID "Your-Router-SSID"
+#define SECRET_PASS "Password"

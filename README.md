@@ -16,6 +16,9 @@ Ak.god. **2020/21**
 Nastavnik i mentor: doc. dr. sc. **Nikola Tanković** (https://www.notion.so/Kontakt-stranica-875574d1b92248b1a8e90dae52cd29a9)
 Demonstrator: **Nikki Bernobić**, bacc. inf.
 
+Izlagano **25.11.-27.11.2022.** na sajmu CROFISH
+
+
 ## Deployed on
 ```
 // Trenutno istekla pretplata servera
@@ -23,10 +26,13 @@ Demonstrator: **Nikki Bernobić**, bacc. inf.
 
 ## Project setup
 ```
-py -m pip install quart
+pip3 install requirements
 ```
 
-### Compiles and hot-reloads for development
+### Project run
 ```
+WIN
 py server.py
+MAC
+python server.py
 ```

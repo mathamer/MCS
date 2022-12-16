@@ -97,11 +97,6 @@ String GenerateSensorData(bool status = false){
   return ParseSensorMessage(message, getTime());
 }
 
-// String GenerateSensorData(bool status = false){
-//   String message = String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20)) + "," + String(random(10, 20));
-//   if(status) message = COMMAND_STATUS;
-//   return ParseSensorMessage(message, getTime());
-// }
 
 void loop() {
   sonda1 = analogRead(0);
@@ -138,7 +133,7 @@ void SendWsMessage(String message){
   client.endMessage();
 }
 
-// citanje komanda sa websocket-a
+// read commands from websocket
 void ReceiveWsMessage(){
   if(!client.connected()){
     Serial.println("Error sending data, client not connected");
@@ -158,7 +153,7 @@ void ReceiveWsMessage(){
         ServerMessage = "";
     }
     if(ServerMessage.length() > sizeof(COMMAND_START)){
-      ServerMessage = ""; // u slucaju da je komanda nepotpuna 
+      ServerMessage = ""; // in case of wrong or invalid command 
     }
   }
 }

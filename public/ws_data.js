@@ -47,19 +47,6 @@ for(let c = 0; c<Charts.length; c++){
     UpdateDataCallback.push(chartCallback);    
 }
 
-// let tmpData = 1;
-// let tmpLabel = 1;
-
-// setInterval(()=>{
-
-//     for(let c = 0; c<UpdateDataCallback.length; c++){
-//         UpdateDataCallback[c](tmpData, tmpLabel)
-//     }
-//     tmpData  ++;
-//     tmpLabel ++;
-// }, 1000)
-
-
 
 var ctx = document.getElementById("line-chart").getContext("2d")
 var fullChart = new Chart(ctx, {
