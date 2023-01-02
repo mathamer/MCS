@@ -20,15 +20,15 @@ function startEx(){
     let timestamp = GenerateDateTimeFromTimestampDonjaCrta(Math.floor(Date.now()))
     fetch(`/api/files/start/${timestamp}`)
     
-    socket.send("START{\"command\":\"StartExperiment\",\"arguments\":[]\"}END");
+    socket.send("START{\"command\":\"StartExperiment\",\"arguments\":[]\}END");
 
     RefreshFileList()
 }
 function stopEx(){
-    socket.send("START{\"command\":\"StopExperiment\",\"arguments\":[]\"}END");
+    socket.send("START{\"command\":\"StopExperiment\",\"arguments\":[]\}END");
 }
 function sendStatus(){
-    socket.send("START{\"command\":\"STATUS\",\"arguments\":[]\"}END");
+    socket.send("START{\"command\":\"STATUS\",\"arguments\":[]\}END");
 }
 
 
@@ -66,7 +66,7 @@ function processDataFromSensor(data){
 initSocket()
 
 function initSocket(){
-    let s = new WebSocket("ws://192.168.4.8:31310/web");
+    let s = new WebSocket("ws://192.168.5.8:31310/web");
 
     s.onopen = function(e) {
     };

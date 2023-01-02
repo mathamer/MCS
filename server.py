@@ -13,8 +13,8 @@ global MessageCounter
 global WsWebQueue
 global ServerInputMessageQueue
 global ServerOutputMessageQueue
-ServerInputMessageQueue = asyncio.Queue()  #  arduino -> web
-ServerOutputMessageQueue = asyncio.Queue()  #  web -> arduino
+ServerInputMessageQueue = asyncio.Queue()  # arduino -> web
+ServerOutputMessageQueue = asyncio.Queue()  # web -> arduino
 TIMEOUT = 0.1
 FILEPATH = "data/"
 FILENAME = "data.csv"
@@ -54,6 +54,8 @@ async def sensorSend():
             data = await ServerOutputMessageQueue.get()
             print("SENSOR SEND MESSAGE : " + str(data))
             await websocket.send(data)
+        except KeyboardInterrupt:
+            exit()
         except asyncio.QueueEmpty as e:
             pass
 
@@ -74,6 +76,8 @@ async def webSend():
             data = await ServerInputMessageQueue.get()
             print("WEB SEND MESSAGE : " + str(data))
             await websocket.send(data)
+        except KeyboardInterrupt:
+            exit()
         except asyncio.QueueEmpty as e:
             pass
 
@@ -152,4 +156,4 @@ async def ws_web():
 
 
 if __name__ == "__main__":
-    app.run(port=31310)
+    app.run(port=31310, host="192.168.5.8")
