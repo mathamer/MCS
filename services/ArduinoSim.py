@@ -1,8 +1,8 @@
-import json
-import time
 import asyncio
-import websockets
 import random
+import time
+import json
+import websockets
 
 COMMAND_START = "START"
 COMMAND_END = "END"
@@ -11,8 +11,6 @@ COMMAND_STOP_EXPERIMENT = "StopExperiment"
 COMMAND_STATUS = "STATUS"
 
 # arduino -> server
-
-
 class SensorCommand:
     def __init__(self, data, timestamp):
         self.data = data
@@ -53,7 +51,7 @@ sonda4 = 410
 sonda5 = 430
 sonda6 = 450
 
-server_address = "192.168.5.8"
+server_address = "127.0.0.1"
 server_path = "/sensor"
 port = 31310
 
@@ -67,8 +65,10 @@ def get_time():
     return now
 
 
+# Simulation of sensor data
 def generate_sensor_data(status=False):
     global sonda1, sonda2, sonda3, sonda4, sonda5, sonda6
+    # Pick value from -12 to 12
     sonda1 += random.randint(-12, 12)
     sonda2 += random.randint(-12, 12)
     sonda3 += random.randint(-12, 12)
@@ -76,6 +76,7 @@ def generate_sensor_data(status=False):
     sonda5 += random.randint(-12, 12)
     sonda6 += random.randint(-12, 12)
 
+    # Limit so it can't go below 1 or above 500
     sonda1 = min(max(sonda1, 1), 500)
     sonda2 = min(max(sonda2, 1), 500)
     sonda3 = min(max(sonda3, 1), 500)
@@ -88,7 +89,7 @@ def generate_sensor_data(status=False):
     return parse_sensor_message(message, get_time())
 
 
-#! drugi timeout prebacuje vrijeme unaprijed, ne sprema u isto vrijeme
+#! Za promjeniti - drugi timeout prebacuje vrijeme unaprijed -> podaci se ne spremaju u isto vrijeme
 async def ws_loop():
     async with websockets.connect(
         f"ws://{server_address}:{port}{server_path}"
@@ -138,5 +139,6 @@ async def main():
     await ws_loop()
 
 
+# It only needs server addres, port and path, it own addres is irrelevant
 if __name__ == "__main__":
     asyncio.run(main())

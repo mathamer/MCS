@@ -1,49 +1,57 @@
+function RefreshFileList() {
+	fetch('/api/files/list')
+		.then((response) => response.json())
+		.then((data) => {
+			let fileListElement = document.getElementById('FileList');
+			fileListElement.innerHTML = '';
 
-function RefreshFileList(){
-    fetch('/api/files/list')
-        .then(response => response.json())
-        .then(data => {
-            let fileListElement = document.getElementById("FileList");
-            fileListElement.innerHTML = ""
-
-            data.map(filename => {
-                fileListElement.appendChild(GenerateFileListChild(filename))
-            })
-        });
+			data.map((filename) => {
+				fileListElement.appendChild(GenerateFileListChild(filename));
+			});
+		});
 }
 
+function GenerateFileListChild(filename) {
+	let listItem = document.createElement('li');
+	let child = document.createElement('button');
+	let analyze = document.createElement('button');
+	let remove = document.createElement('button');
+	let link = document.createElement('a');
 
-function GenerateFileListChild(filename){
-    let listItem = document.createElement("li")
-    let child = document.createElement("button")
-    let remove = document.createElement("button")
-    let link = document.createElement("a")
+	link.setAttribute('href', `/api/files/${filename}`);
+	link.innerHTML = filename;
 
+	child.appendChild(link);
+	child.setAttribute('class', 'BUTTON_START SpaceingSmall');
 
-    link.setAttribute("href", `/api/files/${filename}`)
-    link.innerHTML = filename
+	analyze.setAttribute('onclick', `AnalyzeFilename("${filename}")`);
+	analyze.innerHTML = 'Analiza';
+	analyze.setAttribute('class', 'BUTTON_OPTION SpaceingSmall');
 
-    remove.setAttribute("onclick", `RemoveFilename("${filename}")`)
-    remove.innerHTML = "-"
-    remove.setAttribute("class", "BUTTON_STOP SpaceingSmall")
+	remove.setAttribute('onclick', `RemoveFilename("${filename}")`);
+	remove.innerHTML = 'Del';
+	remove.setAttribute('class', 'BUTTON_REMOVE SpaceingSmall');
 
-    child.appendChild(link)
-    child.setAttribute("class", "BUTTON_START SpaceingSmall")
-    
-    // child.setAttribute("onclick", `DownloadFilename(${filename})`)
-    
-    listItem.appendChild(child)
-    listItem.appendChild(remove)
-    return listItem
+	listItem.appendChild(child);
+	listItem.appendChild(analyze);
+	listItem.appendChild(remove);
+	return listItem;
 }
 
-function DownloadFilename(filename){
-    fetch(`/api/files/${filename}`)
+// function AnalyzeFilename(filename) {
+// 	window.open(`http://localhost:8050?filename=${filename}`);
+// } -> Internal server error 500
+
+// TODO: Sloziti da ne izbacuje errore u konzoli na webu
+function AnalyzeFilename(filename) {
+	fetch(`http://127.0.0.2:8050?filename=${filename}`)
+		.then((response) => response.json())
+		.then((data) => console.log(data));
 }
 
-function RemoveFilename(filename){
-    fetch(`/api/files/${filename}/remove`)
-    RefreshFileList()
+function RemoveFilename(filename) {
+	fetch(`/api/files/${filename}/remove`);
+	RefreshFileList();
 }
 
-RefreshFileList()
+RefreshFileList();

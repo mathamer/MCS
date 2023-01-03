@@ -17,7 +17,7 @@ ServerInputMessageQueue = asyncio.Queue()  # arduino -> web
 ServerOutputMessageQueue = asyncio.Queue()  # web -> arduino
 TIMEOUT = 0.1
 FILEPATH = "data/"
-FILENAME = "data.csv"
+FILENAME = "init.csv"
 FILES = next(os.walk(FILEPATH), (None, None, []))[2]  # [] if no file
 
 app = Quart(__name__, static_folder="public")
@@ -156,4 +156,4 @@ async def ws_web():
 
 
 if __name__ == "__main__":
-    app.run(port=31310, host="192.168.5.8")
+    app.run(port=31310, host="127.0.0.1")
