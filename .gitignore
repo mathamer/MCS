@@ -163,6 +163,5 @@ cython_debug/
 DevScript.md
 serverBackup.py
 arduino_secrets_original.h
-.vscode
 .fleet
 data/

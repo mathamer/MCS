@@ -11,15 +11,19 @@ https://fipu.unipu.hr/
 
 \
 Kolegij:
-**[Web aplikacije](https://www.notion.so/Web-aplikacije-7ba8350d498546a78812399024edac44)**
+**[Web aplikacije](https://www.notion.so/Web-aplikacije-7ba8350d498546a78812399024edac44) i [Raspodjeljeni sustavi](https://fiputreca.notion.site/fiputreca/Raspodijeljeni-sustavi-544564d5cc9e48b3a38d4143216e5dd6)**
 
 Note:
 Izrađeno za kolegij web aplikacije kao projekt te primijenjeno u svrhe završnog rada pod nazivom
-“Izrada ugradbenog računalnog sustava za praćenje filtriranja školjkaša pomoću hall senzora“
+“Izrada ugradbenog računalnog sustava za praćenje filtriranja školjkaša pomoću hall senzora“. Trenutačno nastavljen development u sklopu kolegija raspodjeljeni sustavi.
 
-Ak.god. **2020/21**
-Nastavnik i mentor: doc. dr. sc. **Nikola Tanković** (https://www.notion.so/Kontakt-stranica-875574d1b92248b1a8e90dae52cd29a9)
+Ak.god. **2020/21**  
+Nastavnik i mentor: doc. dr. sc. **[Nikola Tanković](https://www.notion.so/Kontakt-stranica-875574d1b92248b1a8e90dae52cd29a9)**  
 Demonstrator: **Nikki Bernobić**, bacc. inf.
+
+Ak.god. **2022/23**  
+Nastavnik i mentor: doc. dr. sc. **[Nikola Tanković](https://www.notion.so/Kontakt-stranica-875574d1b92248b1a8e90dae52cd29a9)**  
+Asistent: **Srđan Daniel Simić**, mag. inf.
 
 ### Izlagano **25.-27.11.2022.** na sajmu [CROFISH](https://www.crofish.eu/) u Poreču 🐟
 
@@ -39,7 +43,18 @@ Demonstrator: **Nikki Bernobić**, bacc. inf.
 | 1   |                                 Personal computer                                 |     - |
 | ... |                                        ...                                        |   ... |
 
-## WIP...
+## Current features
+
+- Remote monitoring
+- Graphical interface with realtime plotting
+- Fully asynchronous websocket connection
+- Csv file manager
+- Arduino simulation service
+- Csv analysis service
+
+## What's next
+
+- User login and database
 
 ---
 
@@ -52,14 +67,17 @@ Demonstrator: **Nikki Bernobić**, bacc. inf.
 ## Project setup
 
 ```
+MAC/WIN
 pip3 install requirements
+MAC
+sudo ifconfig lo0 alias 127.0.0.2 up
+# Needed for service
 ```
 
 ### Project run
 
 ```
-WIN
-py server.py
-MAC
 python server.py
+python services/ArduinoSim.py
+python services/AnalyzeCsv.py
 ```

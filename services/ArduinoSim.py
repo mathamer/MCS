@@ -139,6 +139,6 @@ async def main():
     await ws_loop()
 
 
-# It only needs server addres, port and path, it own addres is irrelevant
+# It only needs server addres, port and addres of service is irrelevant
 if __name__ == "__main__":
     asyncio.run(main())
