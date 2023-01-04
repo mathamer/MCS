@@ -127,9 +127,8 @@ async def files_list():
 
 @app.route("/api/files/<filename>")
 async def files_get(filename):
-    global FILENAME
     global FILEPATH
-    return await send_from_directory(FILEPATH, FILENAME)
+    return await send_from_directory(FILEPATH, filename)
 
 
 @app.after_request
