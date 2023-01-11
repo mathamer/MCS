@@ -1,16 +1,21 @@
-from quart import Quart, request, Response
+from dash import Dash, html, dcc, Input, Output, State
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 import plotly.express as px
 import pandas as pd
 
-app = Quart(__name__)
+
+app = Dash(__name__)
+app.layout = html.Div([dcc.Location(id="url"), dcc.Graph(id="graph")])
 
 
-@app.route("/")
-async def handle_request():
-    # Get filename from url
-    filename = request.args.get("filename")
-    print(filename)
-    df = pd.read_csv("../data/" + filename)
+@app.callback(Output("graph", "figure"), Input("url", "href"))
+def callback_func(href):
+    parsed_url = urlparse(href)
+    captured_value = parse_qs(parsed_url.query)["filename"][0]
+    print("captured_value: " + captured_value)
+    # Get filename by retrieving parameters from a URL
+    df = pd.read_csv("http://localhost:31310/api/files/" + captured_value)
 
     x, y = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert(
         "Europe/Zagreb"
@@ -23,15 +28,15 @@ async def handle_request():
         "s6",
     ]
     # Draw graph with plotly.express
-    fig = px.line(df, x=x, y=y, title=filename, labels={"x": "Date", "y": "Value"})
+    fig = px.line(
+        df,
+        x=x,
+        y=y,
+        title="Analysis of " + captured_value,
+        labels={"x": "Date", "y": "Value"},
+    )
 
-    if filename:
-        # TODO: Sloziti da ne otvara samo u default browseru?
-        fig.show()
-        return Response({"Succes"}, status=200)
-    else:
-        pass
+    return fig
 
 
-if __name__ == "__main__":
-    app.run(port=8050, host="127.0.0.2")
+app.run_server(debug=True, port=8050, host="0.0.0.0")

@@ -38,16 +38,16 @@ function GenerateFileListChild(filename) {
 	return listItem;
 }
 
-// function AnalyzeFilename(filename) {
-// 	window.open(`http://localhost:8050?filename=${filename}`);
-// } -> Internal server error 500
-
-// TODO: Sloziti da ne izbacuje errore u konzoli na webu
 function AnalyzeFilename(filename) {
-	fetch(`http://127.0.0.2:8050?filename=${filename}`)
-		.then((response) => response.json())
-		.then((data) => console.log(data));
+	window.open(`http://localhost:8050?filename=${filename}`);
 }
+
+// // TODO: Sloziti da ne izbacuje errore u konzoli na webu
+// function AnalyzeFilename(filename) {
+// 	fetch(`http://127.0.0.2:8050?filename=${filename}`)
+// 		.then((response) => response.json())
+// 		.then((data) => console.log(data));
+// }
 
 function RemoveFilename(filename) {
 	fetch(`/api/files/${filename}/remove`);

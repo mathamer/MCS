@@ -65,7 +65,7 @@ function processDataFromSensor(data) {
 initSocket();
 
 function initSocket() {
-	let s = new WebSocket('ws://127.0.0.1:31310/web');
+	let s = new WebSocket('ws://localhost:31310/web');
 
 	s.onopen = function (e) {};
 

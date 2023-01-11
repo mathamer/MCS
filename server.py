@@ -155,4 +155,5 @@ async def ws_web():
 
 
 if __name__ == "__main__":
-    app.run(port=31310, host="127.0.0.1")
+    # app.run(port=31310, host="127.0.0.1")
+    app.run(port=31310, host="0.0.0.0")  # Needed for Docker
