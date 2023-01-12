@@ -27,7 +27,6 @@ class ServerCommand:
 def parse_server_message(message):
     message = message.replace(COMMAND_START, "")
     message = message.replace(COMMAND_END, "")
-    print(message)
 
     doc = json.loads(message)
 
@@ -89,13 +88,12 @@ def generate_sensor_data(status=False):
     return parse_sensor_message(message, get_time())
 
 
-#! Za promjeniti - drugi timeout prebacuje vrijeme unaprijed -> podaci se ne spremaju u isto vrijeme
+#! Za promjeniti - timeout pod try prebacuje vrijeme unaprijed -> podaci se ne spremaju u isto vrijeme na serveru
 async def ws_loop():
     async with websockets.connect(
         f"ws://{server_address}:{port}{server_path}"
     ) as websocket:
         while True:
-            print(start_experiment)
             if start_experiment:
                 # Send a message every 2 seconds
                 await asyncio.sleep(2)
@@ -111,6 +109,7 @@ async def ws_loop():
 
 async def send_ws_message(websocket, message):
     await websocket.send(message)
+    print(message)
 
 
 # read commands from websocket

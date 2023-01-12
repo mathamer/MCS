@@ -1,6 +1,5 @@
-from dash import Dash, html, dcc, Input, Output, State
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from dash import Dash, html, dcc, Input, Output
+from urllib.parse import urlparse, parse_qs
 import plotly.express as px
 import pandas as pd
 
@@ -17,6 +16,7 @@ def callback_func(href):
     # Get filename by retrieving parameters from a URL
     df = pd.read_csv("http://localhost:31310/api/files/" + captured_value)
 
+    # Convert timestamp to readable format
     x, y = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert(
         "Europe/Zagreb"
     ), [
@@ -39,4 +39,4 @@ def callback_func(href):
     return fig
 
 
-app.run_server(debug=True, port=8050, host="0.0.0.0")
+app.run_server(debug=False, port=8050, host="0.0.0.0")
